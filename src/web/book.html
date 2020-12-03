@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>book</title>
+</head>
+<body>
+  <div>
+    <input placeholder="请输入书编号" id="num"/>
+    <input placeholder="请输入书名" id="bookname"/>
+    <p>
+      <button id="addBtn">添加</button>
+    </p>
+    <ul id="booklist"></ul>
+  </div>
+  <script src="js/jquery.min.js"></script>
+  <script>
+    function getBookList(){
+      $.ajax({
+        url:"http://localhost:3000/booklist",
+        method:"GET",
+        success:function(data){
+          var html = "";
+          data && data.map(function(item){
+            html += "<li>"+item.num+'-'+item.bookname+"</li>";
+          })
+          $("#booklist").html("");
+          $("#booklist").append(html);
+        }
+      })
+    }
+    getBookList();
+    $("#addBtn").click(function(){
+      console.log("执行")
+      $.ajax({
+        url:"http://localhost:3000/addbook",
+        method:"GET",
+        data:{
+          num:$("#num").val(),
+          bookname:$("#bookname").val()
+        },
+        success:function(data){
+          getBookList();
+        }
+      })
+    })
+  </script>
+</body>
+</html>
